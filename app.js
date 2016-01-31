@@ -1,17 +1,29 @@
 var request = require("superagent");
 var fs = require("fs");
+var http = require('http');
 var moment = require("moment");
 var nodemailer = require("nodemailer");
 var config = require("./config.js").settings;
 
-var today = "2015-10-09" //moment().format("YYYY-MM-DD");
-var lastRunEpoch = 1444423781; //load from file
-console.log(today);
+var today;
+var lastRunEpoch;
 
-request
-    .get(config.bmltServerRoot + "/client_interface/json/?switcher=GetChanges&start_date=" + today)
-    .type("json")
-    .end(processChanges);
+http.createServer(function (req, res) {
+    today = moment().format("YYYY-MM-DD");
+
+    loadCurrentEpoch(function(data) {
+        lastRunEpoch = data;
+        saveCurrentEpoch();
+        request
+            .get(config.bmltServerRoot + "/client_interface/json/?switcher=GetChanges&start_date=" + today)
+            .type("json")
+            .end(processChanges);
+
+
+        res.writeHead(200, {'Content-Type': 'text/plain'} );
+        res.end("ok");
+    });
+}).listen(8080);
 
 function processChanges(err, res) {
     var changesData = JSON.parse(res.text);
@@ -37,5 +49,14 @@ function sendMail(message) {
 
 function saveCurrentEpoch() {
     var newEpoch = (new Date).getTime();
-    // save to file here
+    fs.writeFile("lastRun", newEpoch)
+}
+
+function loadCurrentEpoch(callback) {
+    fs.readFile("lastRun", function (err, data) {
+        if (err) {
+            throw err;
+        }
+        callback(data.toString());
+    });
 }
