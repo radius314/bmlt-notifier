@@ -23,7 +23,7 @@ http.createServer(function (req, res) {
         res.writeHead(200, {'Content-Type': 'text/plain'} );
         res.end("ok");
     });
-}).listen(8080);
+}).listen(config.port);
 
 function processChanges(err, res) {
     var changesData = JSON.parse(res.text);
