@@ -28,7 +28,7 @@ http.createServer(function (req, res) {
         res.writeHead(200, {'Content-Type': 'text/plain'} );
         res.end("ok");
     });
-}).listen(config.port);
+}).listen(process.env.PORT);
 
 function processChanges(err, res) {
     log("processing changes.")
