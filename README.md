@@ -5,23 +5,22 @@
 Below is a sample configuration file.  You can also use any parameters for the `nodemailer`.  (ref: https://github.com/nodemailer/nodemailer)
 
 ```json
-exports.settings = {
-    "port":80
-    "bmltServerRoot":"http://hostname:port/main_server",
+{
+    "bmltServerRoot":"http://server:port/main_server",
     "nodeMailerTransportConfiguration": {
-        "host":'',
-        "port": 587,
+        "host":"",
+         "port": "587",
         "secure":false,
         "requireTLS":true,
         "auth" : {
-            user: '',
-            pass: ''
+            "user": "",
+            "pass": ""
         }
     },
     "nodeMailerMessageConfiguration": {
-        from: ',
-        to: '',
-        subject: 'M'
+        "from": "",
+        "to": "",
+        "subject": ""
     }
-};
+}
 ```
