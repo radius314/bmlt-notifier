@@ -4,7 +4,7 @@ var http = require('http');
 var moment = require("moment");
 var nodemailer = require("nodemailer");
 var dateFormat = require('dateformat')
-var config = require("./config.js").settings;
+var config = require("./config").settings;
 
 var today;
 var lastRunEpoch;
