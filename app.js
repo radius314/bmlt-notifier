@@ -10,7 +10,7 @@ var lastRunEpoch;
 log("loading config")
 
 var config = JSON.parse(fs.readFileSync("config.json"));
-log("config loaded: " + config.toString());
+log("config loaded: " + JSON.stringify(config));
 
 http.createServer(function (req, res) {
     log("request received");
