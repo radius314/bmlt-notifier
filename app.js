@@ -4,10 +4,12 @@ var http = require('http');
 var moment = require("moment");
 var nodemailer = require("nodemailer");
 var dateFormat = require('dateformat')
-var config = require(__dirname + "\\config.js").settings;
-
 var today;
 var lastRunEpoch;
+
+var config = JSON.parse(
+    fs.readFileSync("config.json")
+);
 
 http.createServer(function (req, res) {
     log("request received");
