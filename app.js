@@ -7,9 +7,11 @@ var dateFormat = require('dateformat')
 var today;
 var lastRunEpoch;
 
-var config = JSON.parse(
-    fs.readFileSync("config.json")
-);
+log("loading config")
+
+var config = JSON.parse(fs.readFileSync("config.json"));
+
+log("config loaded");
 
 http.createServer(function (req, res) {
     log("request received");
@@ -71,7 +73,7 @@ function loadCurrentEpoch(callback) {
 
 function log(message) {
     var timestamp = dateFormat(new Date(), "yyyy-MM-dd h:MM:ss TT");
-    fs.appendFile('bmlt-notifer.log', timestamp + ": " + message + "\r\n", function (err) {
+    fs.appendFile('bmlt-notifier.log', timestamp + ": " + message + "\r\n", function (err) {
         if (err) throw err;
     });
 }
