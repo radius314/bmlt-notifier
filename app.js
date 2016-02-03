@@ -3,12 +3,14 @@ var fs = require("fs");
 var http = require('http');
 var moment = require("moment");
 var nodemailer = require("nodemailer");
+var dateFormat = require('dateformat')
 var config = require("./config.js").settings;
 
 var today;
 var lastRunEpoch;
 
 http.createServer(function (req, res) {
+    log("request received");
     today = moment().format("YYYY-MM-DD");
 
     loadCurrentEpoch(function(data) {
@@ -26,6 +28,7 @@ http.createServer(function (req, res) {
 }).listen(config.port);
 
 function processChanges(err, res) {
+    log("processing changes.")
     var changesData = JSON.parse(res.text);
 
     for (var name in changesData) {
@@ -41,6 +44,7 @@ function processChanges(err, res) {
 }
 
 function sendMail(message) {
+    log("sending email");
     var transporter = nodemailer.createTransport(config.nodeMailerTransportConfiguration);
     var sendMessageConfiguration = config.nodeMailerMessageConfiguration;
     sendMessageConfiguration.html = message;
@@ -48,15 +52,24 @@ function sendMail(message) {
 }
 
 function saveCurrentEpoch() {
+    log("saving current epoch");
     var newEpoch = (new Date).getTime();
     fs.writeFile("lastRun", newEpoch)
 }
 
 function loadCurrentEpoch(callback) {
+    log("loading current epoch");
     fs.readFile("lastRun", function (err, data) {
         if (err) {
             throw err;
         }
         callback(data.toString());
+    });
+}
+
+function log(message) {
+    var timestamp = dateFormat(new Date(), "yyyy-MM-dd h:MM:ss TT");
+    fs.appendFile('bmlt-notifer.log', timestamp + ": " + message + "\r\n", function (err) {
+        if (err) throw err;
     });
 }

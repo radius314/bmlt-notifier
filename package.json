@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dateformat": "^1.0.12",
     "moment": "^2.10.6",
     "nodemailer": "^1.8.0",
     "superagent": "^1.4.0"
