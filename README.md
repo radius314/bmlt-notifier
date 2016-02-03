@@ -6,7 +6,7 @@ Below is a sample configuration file.  You can also use any parameters for the `
 
 ```json
 exports.settings = {
-    "port":8080
+    "port":80
     "bmltServerRoot":"http://hostname:port/main_server",
     "nodeMailerTransportConfiguration": {
         "host":'',
