@@ -3,9 +3,10 @@ var fs = require("fs");
 var http = require('http');
 var moment = require("moment");
 var nodemailer = require("nodemailer");
-var dateFormat = require('dateformat')
+var dateFormat = require('dateformat');
 var today;
 var lastRunEpoch;
+var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 log("loading config")
 
@@ -39,6 +40,11 @@ function processChanges(err, res) {
             var data = "<br><b>Change Time:</b> " + changesData[name].date_string;
             data += "<br><b>Meeting ID:</b> " + changesData[name].meeting_id;
             data += "<br><b>Meeting Name:</b> " + changesData[name].meeting_name;
+            data += "<br><b>Meeting City:</b> " + changesData[name].json_data.location_municipality;
+            data += "<br><b>Meeting Day:</b> " + days[changesData[name].json_data.weekday_tinyint - 1];
+            data += "<br><b>Meeting Time:</b> " + changesData[name].json_data.start_time;
+            data += "<br><b>Service Body Name:</b> " + changesData[name].service_body_name;
+            data += "<br><b>Change Made By:</b> " + changesData[name].user_name;
             data += "<br><b>Change:</b> " + changesData[name].details;
             console.log("Change occurred: " + data);
             sendMail(data);
