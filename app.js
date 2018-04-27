@@ -10,26 +10,32 @@ var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'S
 
 log("loading config")
 
-var config = JSON.parse(fs.readFileSync("config.json"));
+var config = JSON.parse(fs.readFileSync("config.js"));
 log("config loaded: " + JSON.stringify(config));
 
-http.createServer(function (req, res) {
-    log("request received");
+if (config.web) {
+    http.createServer(function (req, res) {
+        log("request received");
+        getAndProcessDiffs()
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        res.end("ok");
+    }).listen(config.webServerPort);
+} else {
+    getAndProcessDiffs();
+}
+
+function getAndProcessDiffs(callback) {
     today = moment().format("YYYY-MM-DD");
 
-    loadCurrentEpoch(function(data) {
+    loadCurrentEpoch(function (data) {
         lastRunEpoch = data;
-        saveCurrentEpoch();
+        if (!config.dryRun) saveCurrentEpoch();
         request
             .get(config.bmltServerRoot + "/client_interface/json/?switcher=GetChanges&start_date=" + today)
             .type("json")
             .end(processChanges);
-
-
-        res.writeHead(200, {'Content-Type': 'text/plain'} );
-        res.end("ok");
     });
-}).listen(process.env.PORT);
+}
 
 function processChanges(err, res) {
     log("processing changes.")
@@ -61,7 +67,11 @@ function processChanges(err, res) {
 
             data += "</table>";
             console.log("Change occurred: " + data);
-            sendMail(data);
+            if (!config.dryRun) {
+                sendMail(data);
+            } else {
+                console.log(data)
+            }
         }
     }
 }
