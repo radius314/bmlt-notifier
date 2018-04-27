@@ -2,7 +2,7 @@
 
 ##Configuration
 
-Below is a sample configuration file.  You can also use any parameters for the `nodemailer`.  (ref: https://github.com/nodemailer/nodemailer).
+Below is a sample configuration file (should be called `config.js`).  You can also use any parameters for the `nodemailer`.  (ref: https://github.com/nodemailer/nodemailer).
 
 You may want to set the `lastRun` file in this folder to be the current UNIX epoch (https://www.epochconverter.com).  Otherwise you will get a lot of emails on the first run.
 
